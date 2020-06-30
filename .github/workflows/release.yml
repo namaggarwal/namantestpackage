@@ -42,7 +42,7 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
           python setup.py sdist bdist_wheel
-          twine upload --repository dist/*
+          twine upload dist/*
       - name: Notify user of successful release
         if: ${{ steps.check-release.outputs.group1 != ''}}
         uses: peter-evans/create-or-update-comment@v1
