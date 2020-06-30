@@ -53,7 +53,7 @@ jobs:
         if: ${{ steps.check-release.outputs.group1 != ''}}
         uses: peter-evans/close-issue@v1
         with:
-          issue-number: ${{ github.event.issue.id }}
+          issue-number: ${{ github.event.issue.number }}
           comment: Release done
 
 
