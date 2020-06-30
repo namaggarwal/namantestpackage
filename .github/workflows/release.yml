@@ -39,7 +39,7 @@ jobs:
         if: ${{ steps.check-release.outputs.group1 != ''}}
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD_PRD }}
         run: |
           python setup.py sdist bdist_wheel
           twine upload dist/*
