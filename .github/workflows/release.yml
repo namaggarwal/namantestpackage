@@ -25,11 +25,35 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ steps.check-release.outputs.group1 }}
+      - name: Set up Python
+        if: ${{ steps.check-release.outputs.group1 != ''}}
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        if: ${{ steps.check-release.outputs.group1 != ''}}
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine
+      - name: Build and publish
+        if: ${{ steps.check-release.outputs.group1 != ''}}
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          python setup.py sdist bdist_wheel
+          twine upload --repository dist/*
       - name: Notify user of successful release
         if: ${{ steps.check-release.outputs.group1 != ''}}
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ github.event.comment.id }}
           reactions: hooray
+      - name: Close Issue
+        if: ${{ steps.check-release.outputs.group1 != ''}}
+        uses: peter-evans/close-issue@v1
+        with:
+          issue-number: ${{ github.event.issue.id }}
+          comment: Release done
 
 
